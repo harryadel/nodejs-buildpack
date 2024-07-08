@@ -18,9 +18,6 @@ source $BP_DIR/lib/dependencies.sh
 
 export METEOR_ALLOW_SUPERUSER=true
 
-# Run everything as root
-sudo bash << EOF
-
 # Load environment
 export_env_dir $ENV_DIR
 
@@ -42,10 +39,8 @@ echo "-----> Cleaning up"
 cd $BUILD_DIR
 rm -rf .meteor/local
 
-EOF
-
 # Create a Procfile if it doesn't exist
 if [ ! -f $BUILD_DIR/Procfile ]; then
   echo "-----> Creating Procfile"
-  echo "web: node .build/bundle/main.js" > $BUILD_DIR/Procfile
+  echo "web: METEOR_ALLOW_SUPERUSER=true node .build/bundle/main.js" > $BUILD_DIR/Procfile
 fi
