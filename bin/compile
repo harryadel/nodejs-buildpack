@@ -31,7 +31,13 @@ node_version=$(cat $BUILD_DIR/package.json | grep '"node":' | tail -n 1 | awk -F
 echo "Node.js version: $node_version"
 
 echo "-----> Installing Node.js"
-install_nodejs "$BUILD_DIR" "$CACHE_DIR"
+node_version=$(cat $BUILD_DIR/package.json | grep '"node":' | tail -n 1 | awk -F'"' '{ print $4 }')
+if [ -z "$node_version" ]; then
+  echo "-----> No valid Node.js version found, using default"
+  node_version="14.x"
+fi
+install_nodejs "$BUILD_DIR" "$CACHE_DIR" "$node_version"
+
 
 echo "-----> Installing Meteor"
 install_meteor "$BUILD_DIR" "$CACHE_DIR"
