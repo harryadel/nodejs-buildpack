@@ -21,6 +21,15 @@ export METEOR_ALLOW_SUPERUSER=true
 # Load environment
 export_env_dir $ENV_DIR
 
+# Debug: Print package.json content
+echo "-----> Debug: package.json content"
+cat $BUILD_DIR/package.json
+
+# Debug: Print Node.js version
+echo "-----> Debug: Node.js version from package.json"
+node_version=$(cat $BUILD_DIR/package.json | grep '"node":' | tail -n 1 | awk -F'"' '{ print $4 }')
+echo "Node.js version: $node_version"
+
 echo "-----> Installing Node.js"
 install_nodejs "$BUILD_DIR" "$CACHE_DIR"
 
