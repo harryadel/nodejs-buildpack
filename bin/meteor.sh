@@ -266,6 +266,15 @@ install_meteor_npm_package_json() {
   build_dir=$1
   cache_dir=$2
 
+ # Find and chmod npx-shrinkwrap.json
+  shrinkwrap_file=$(find "$build_dir" -name "npx-shrinkwrap.json")
+  if [ -n "$shrinkwrap_file" ]; then
+    chmod 755 "$shrinkwrap_file"
+    echo "Changed permissions of $shrinkwrap_file to 755" | output "$LOG_FILE"
+  else
+    echo "npx-shrinkwrap.json not found" | output "$LOG_FILE"
+  fi
+
   pushd "$build_dir/.app-build/bundle/programs/server" >/dev/null
   npm install --unsafe-perm --userconfig $build_dir/.npmrc 2>&1 | output "$LOG_FILE"
   (npm ls --depth=0 | tail -n +2 || true) 2>/dev/null | output "$LOG_FILE"
